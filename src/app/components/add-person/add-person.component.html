@@ -1,0 +1,41 @@
+<div>
+  <h2 class="text-muted mb-4">Adicionar Nova Pessoa</h2>
+  <div class="card shadow">
+    <div class="card-body">
+      <form (ngSubmit)="addPerson()">
+        <div class="mb-4">
+          <label for="personName" class="form-label">Nome da Pessoa</label>
+          <input type="text" class="form-control" id="personName" [(ngModel)]="personName" name="personName">
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5>Adicionar Contatos</h5>
+          <button type="button" class="btn btn-light border" title="Adicionar mais um contato" (click)="addContact()"><i class="fas fa-plus"></i></button>
+        </div>
+        <div *ngFor="let contact of contacts; let i = index" class="mb-3">
+          <div class="row d-flex align-items-end ">
+            <div class="col-4">
+              <label for="contactType{{i}}" class="form-label">Tipo de Contato</label>
+              <select class="form-select" id="contactType{{i}}" [(ngModel)]="contact.type" name="contactType{{i}}">
+                <option value="" disabled>Tipo</option>
+                <option value="email">E-mail</option>
+                <option value="phone">Telefone</option>
+                <option value="whatsapp">WhatsApp</option>
+              </select>
+            </div>
+            <div class="col">
+              <label for="contactValue{{i}}" class="form-label">Contato</label>
+              <input type="text" class="form-control" id="contactValue{{i}}" [(ngModel)]="contact.contact" name="contactValue{{i}}">
+            </div>
+            <div class="col-auto" *ngIf="i > 0">
+              <button type="button" class="btn btn-light border" title="Remover contato" (click)="removeContact(i)"><i class="fas fa-times"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-light border" (click)="navigateToPeopleList()">Cancelar</button>
+          <button type="submit" class="btn btn-dark">Adicionar Pessoa</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

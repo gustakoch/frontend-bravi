@@ -1,0 +1,122 @@
+<div class="d-flex justify-content-between">
+  <h1 class="text-muted">Agenda de contatos</h1>
+  <button class="btn btn-dark mb-4" (click)="navigateToAddPerson()">Adicionar pessoa</button>
+</div>
+<div class="row mt-3">
+  <div class="col" *ngIf="people.length === 0">
+    <div class="text-muted lead">Nenhuma pessoa encontrada.</div>
+  </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 mb-3" *ngFor="let person of people">
+    <div class="card shadow">
+      <div class="card-body d-flex flex-column justify-content-between">
+        <div>
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title fw-semibold">{{ person.name }}</h4>
+            <div class="d-flex gap-2">
+              <button class="btn btn-dark" title="Editar pessoa" (click)="openEditPersonModal(editPersonModal, person)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-danger" title="Remover pessoa e contatos" (click)="deletePerson(person.id)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+          <hr class="text-muted" />
+          <div class="card-text text-muted mb-2" *ngFor="let contact of person.contacts">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="fs-6">
+                {{ contact.type | typeTransform }}: <b>{{ contact.contact }}</b>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-light border" title="Editar contato" (click)="openEditContactModal(editContactModal, contact)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-light border" title="Remover contato" (click)="contact.id ? deleteContact(contact.id) : null">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-light border w-100 mt-2" (click)="openAddContactModal(addContactModal, person.id)">
+          Adicionar contato
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #addContactModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="addContactModalLabel">{{ isEditMode ? 'Editar Contato' : 'Adicionar Contato' }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="contactType" class="form-label">Tipo de Contato</label>
+        <select class="form-select" id="contactType" [(ngModel)]="newContact.type" name="type">
+          <option value="" disabled>Selecione um tipo</option>
+          <option value="email">E-mail</option>
+          <option value="phone">Telefone</option>
+          <option value="whatsapp">WhatsApp</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="contactValue" class="form-label">Contato</label>
+        <input type="text" class="form-control" id="contactValue" [(ngModel)]="newContact.contact" name="contact">
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light border" (click)="modal.dismiss('cancel click')">Cancelar</button>
+    <button type="button" class="btn btn-dark" (click)="addOrUpdateContact()">{{ isEditMode ? 'Salvar' : 'Adicionar' }}</button>
+  </div>
+</ng-template>
+
+<ng-template #editContactModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="editContactModalLabel">Editar Contato</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="editContactType" class="form-label">Tipo de Contato</label>
+        <select class="form-select" id="editContactType" [(ngModel)]="newContact.type" name="type">
+          <option value="" disabled>Selecione um tipo</option>
+          <option value="email">E-mail</option>
+          <option value="phone">Telefone</option>
+          <option value="whatsapp">WhatsApp</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="editContactValue" class="form-label">Contato</label>
+        <input type="text" class="form-control" id="editContactValue" [(ngModel)]="newContact.contact" name="contact">
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light border" (click)="modal.dismiss('cancel click')">Cancelar</button>
+    <button type="button" class="btn btn-dark" (click)="addOrUpdateContact()">Atualizar</button>
+  </div>
+</ng-template>
+
+<ng-template #editPersonModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Editar Pessoa</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="personName" class="form-label">Nome da pessoa</label>
+        <input type="text" class="form-control" id="personName" name="personName" [(ngModel)]="editPersonName">
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light border" (click)="modal.dismiss('cancel click')">Cancelar</button>
+    <button type="button" class="btn btn-dark" (click)="updatePerson()">Atualizar</button>
+  </div>
+</ng-template>
